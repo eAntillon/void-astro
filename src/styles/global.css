@@ -1,0 +1,19 @@
+html {
+    font-family: 'Reddit Mono', monospace;
+    width: 100%;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+img {
+    @apply rounded-lg;
+    max-width: 100%;
+    height: auto;
+}

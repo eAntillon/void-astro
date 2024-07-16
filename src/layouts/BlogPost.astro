@@ -1,0 +1,175 @@
+---
+import type { CollectionEntry } from "astro:content";
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import FormattedDate from "../components/FormattedDate.astro";
+import TagLink from "../components/TagLink.astro";
+
+type Props = CollectionEntry<"blog">["data"];
+
+const { title, description, pubDate, heroImage, tags } = Astro.props;
+
+---
+
+<html lang="en" class="dark">
+  <head>
+    <BaseHead title={title} description={description} />
+  </head>
+  <body class="w-full max-w-screen-md mx-auto my-4 dark:bg-neutral-800 dark:text-neutral-300 transition-colors duration-300">
+    <Header />
+    <main>
+      <article>
+        <div class="flex justify-between mb-6">
+          <FormattedDate date={pubDate} />
+          <p class="text-gray-500 dark:text-neutral-400 text-xs font-medium tracking-wide">
+            5 min read
+          </p>
+        </div>
+        <h1 class="text-5xl mb-8">
+          {title}
+        </h1>
+        <div>
+          {
+            heroImage && (
+              <img width={1020} height={510} src={heroImage} alt="" />
+            )
+          }
+        </div>
+        <div class="mt-10">
+          <slot />
+        </div>
+        <div>
+          {
+            tags && (
+                <ul class="flex gap-2">
+                  {tags.map((tag) => (
+                    <li>
+                      <TagLink tag={tag} />
+                    </li>
+                  ))}
+                </ul>
+            )
+          }
+        </div>
+      </article>
+    </main>
+    <Footer />
+  </body>
+
+  <style is:inline>
+    /* Base Styles */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 20px 0;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--grey-900);
+    margin-top: 24px;
+    margin-bottom: 16px;
+    font-weight: bold;
+}
+
+h1 { font-size: 32px; }
+h2 { font-size: 28px; }
+h3 { font-size: 24px; }
+h4 { font-size: 20px; }
+h5 { font-size: 18px; }
+h6 { font-size: 16px; }
+
+/* Paragraphs */
+p {
+    margin-top: 0;
+    margin-bottom: 16px;
+}
+
+/* Blockquotes */
+blockquote {
+    border-left: 4px solid #ccc;
+    padding: 10px 20px;
+    margin: 20px 0;
+    color: #666;
+    background-color: #f9f9f9;
+    @apply dark:bg-neutral-700 text-white border-l-4 border-neutral-500; 
+}
+
+/* Code Blocks and Inline Code */
+
+pre {
+    padding: 10px;
+    overflow-x: auto;
+    margin-top: 0;
+    margin-bottom: 16px;
+}
+
+code {
+    padding: 2px 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 90%;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    margin-bottom: 20px;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #f4f4f4;
+    @apply dark:bg-neutral-700;
+}
+
+/* Lists */
+.footnotes ul, ol {
+    margin-top: 0;
+    margin-bottom: 16px;
+    padding-left: 20px;
+    list-style: outside;
+}
+
+/* Special HTML Tags */
+abbr {
+    border-bottom: 1px dotted #666;
+    cursor: help;
+}
+
+kbd {
+    padding: 2px 4px;
+    font-size: 90%;
+    color: #fff;
+    background-color: #333;
+    border-radius: 3px;
+}
+
+mark {
+    background-color: yellow;
+    color: black;
+}
+
+sup, sub {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+
+sup { top: -0.5em; }
+sub { bottom: -0.25em; }
+
+
+
+
+</style>
+
+
+  </html>

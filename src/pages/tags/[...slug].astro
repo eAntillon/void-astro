@@ -1,0 +1,61 @@
+---
+import { getCollection } from 'astro:content';
+import Header from '../../components/Header.astro';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import type { CollectionEntry } from 'astro:content';
+import FormattedDate from '../../components/FormattedDate.astro';
+import TagLink from '../../components/TagLink.astro';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('blog');
+    const tags = posts.flatMap((post) => post.data.tags);
+    return tags.map((tag) => ({
+        params: { slug: tag },
+        props: { tag, posts: posts.filter((post) => post.data?.tags?.includes(tag as string)) },
+    }));
+}
+const {tag, posts} = Astro.props;
+type Post = CollectionEntry<'blog'>;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={tag as string} description={"Posts tagged with " + tag as string + "."} />
+  </head>
+  <body class="w-full flex flex-col mx-auto max-w-screen-md min-h-dvh justify-between dark:bg-neutral-800 dark:text-neutral-300 transition-colors duration-300" >
+    <Header />
+    <main class="flex flex-col justify-center">
+        <h2 class="w-full font-bold text-black dark:text-white mb-8">🗃️ Posts tagged with <span>
+            {tag}</span></h1>
+        <ul>
+            {posts.map((post: Post) => (
+                <div class="flex gap-2 justify-between border-b pb-4">
+              <div class="flex flex-col gap-4">
+                <FormattedDate date={post.data.pubDate} />
+                <a class="font-bold text-lg" href={`/blog/${post.slug}`}>
+                  {post.data.title}
+                </a>
+                <div class="flex gap-2">
+                  {post.data.tags?.map((i: string) => {
+                    return <TagLink tag={i} />;
+                  })}
+                </div>
+              </div>
+              <a href={`/blog/${post.slug}`}>
+                <img
+                  src={post.data.heroImage}
+                  alt=""
+                  class="w-40 h-24 bg-contain border border-gray-200"
+                />
+              </a>
+            </div>
+                ))}
+        </ul>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+

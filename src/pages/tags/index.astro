@@ -1,0 +1,38 @@
+---
+import { getCollection } from "astro:content";
+import BaseHead from "../../components/BaseHead.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { SITE_DESCRIPTION, SITE_TITLE } from "../../consts";
+
+const posts = (await getCollection("blog")).sort(
+  (a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf()
+);
+const tags =  posts.flatMap(post => post.data.tags).filter((tag, index, self) => self.indexOf(tag) === index);
+---
+
+<!doctype html>
+<html lang="en" class="min-h-dvh">
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+  <body class="w-full flex flex-col mx-auto max-w-screen-md min-h-dvh justify-between dark:bg-neutral-800 dark:text-neutral-300 transition-colors duration-300">
+    <Header />
+    <main
+      class="w-full max-w-screen-md mx-auto my-4 flex flex-col gap-4 justify-center"
+    >
+
+        <ul class="flex flex-wrap gap-2">
+            {tags.map(tag => (
+                <li>
+                    <a href={`/tags/${tag}`} class=" p-1 rounded-md">
+                        #{tag}
+                    </a>
+                </li>
+            ))}
+        </ul>
+     
+    </main>
+    <Footer />
+  </body>
+</html>

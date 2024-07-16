@@ -1,0 +1,42 @@
+---
+import { getCollection } from "astro:content";
+import FormattedDate from "./FormattedDate.astro";
+import TagLink from "./TagLink.astro";
+
+const posts = await getCollection("blog");
+let numberOfPostsToDisplay = 3;
+let recentPosts = posts.slice(0, numberOfPostsToDisplay);
+---
+
+<div class="px-4 md:px-16 flex flex-col gap-4 mt-16">
+  <h3 class="font-medium text-base">Recent Publications</h3>
+  {
+    recentPosts.map((post) => (
+      <div class="flex gap-2 justify-between border-b pb-4">
+        <div class="flex flex-col gap-4">
+          {/* <p>{post.data.pubDate}</p> */}
+          <FormattedDate date={post.data.pubDate} />
+          <a class="font-bold text-lg" href={`/blog/${post.slug}`}>
+            {post.data.title}
+          </a>
+          <div class="flex gap-2">
+              {post.data.tags?.map((i) => {
+                return <TagLink tag={i} />;
+              })}
+          </div>
+        </div>
+        <a href={`/blog/${post.slug}`}>
+          <img
+            src={post.data.heroImage}
+            alt=""
+            class="w-40 h-24 bg-contain border border-gray-200"
+          />
+        </a>
+      </div>
+    ))
+  }
+  <a
+    class="border flex justify-center items-center hover:no-underline hover:bg-gray-200 hover:border-gray-300 transition-colors ease-in-out bg-gray-100 w-full max-w-xs mx-auto mt-12 rounded-lg text-gray-700 text-xs h-8 font-medium border-gray-200 dark:bg-neutral-700 dark:border-neutral-600 dark:text-neutral-300 hover:dark:bg-neutral-700/50 hover:dark:border-neutral-600 hover:dark:text-neutral-100"
+    href="/blog">View more</a
+  >
+</div>
