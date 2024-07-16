@@ -23,7 +23,5 @@ npm i
 #  Start the development server
 npm run dev
 ```
-
-![blog](https://github.com/withastro/astro/assets/2244813/ff10799f-a816-4703-b967-c78997e8323d)
-
+![frame](https://github.com/user-attachments/assets/0ab4b7b7-6b20-4ae2-8266-aa029a503cf1)
 
